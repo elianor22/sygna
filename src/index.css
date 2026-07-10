@@ -1,0 +1,50 @@
+@import "tailwindcss";
+
+:root {
+  --color-bg: #F2F4F6;
+  --color-surface: #FFFFFF;
+  --color-text-primary: #1B2A4A;
+  --color-text-secondary: #3D4451;
+  --color-border: #DDE1E6;
+  --color-accent: #A6342A;
+  --color-success: #2F6F62;
+  --color-warning: #D97706;
+  --color-placeholder-fill: rgba(34, 197, 94, 0.15);
+  --color-placeholder-border: #22C55E;
+}
+
+[data-theme='dark'] {
+  --color-bg: #10141C;
+  --color-surface: #171C27;
+  --color-text-primary: #EDEFF2;
+  --color-text-secondary: #A8AFBD;
+  --color-border: #2B3140;
+  --color-accent: #E0574A;
+  --color-success: #4FB39C;
+  --color-warning: #F59E0B;
+  --color-placeholder-fill: rgba(52, 211, 153, 0.22);
+  --color-placeholder-border: #34D399;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background-color: var(--color-bg);
+  color: var(--color-text-primary);
+  font-family: 'IBM Plex Sans', sans-serif;
+}
+
+#root {
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-shell {
+  height: 100vh;
+  height: 100dvh;
+}
