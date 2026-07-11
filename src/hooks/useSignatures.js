@@ -18,7 +18,7 @@ function sigReducer(state, action) {
 export function useSignatures() {
   const [signatures, dispatch] = useReducer(sigReducer, [])
 
-  function addSignature(page) {
+  function addSignature(page, type = 'placeholder', extra = {}) {
     const id = `sig-${Date.now()}`
     dispatch({
       type: 'ADD',
@@ -29,8 +29,9 @@ export function useSignatures() {
         yPct: 0.45,
         widthPct: 0.25,
         heightPct: 0.07,
-        type: 'placeholder',
-        content: null,
+        type,
+        content: type === 'text' ? '' : null,
+        ...extra,
       },
     })
     return id

@@ -1,11 +1,12 @@
 import { useState, useRef } from "react";
-import { Sun, Moon, PenLine, FilePlus2, Signature } from "lucide-react";
+import { Sun, Moon, PenLine, FilePlus2, Signature, Type, Shapes, Square, Circle } from "lucide-react";
 import { PdfUploader } from "./components/PdfUploader";
 import { PdfViewer } from "./components/PdfViewer";
 import { PageSidebar } from "./components/PageSidebar";
 import { SignatureConfigPanel } from "./components/SignatureConfigPanel";
 import { SignaturePanel } from "./components/SignaturePanel";
 import { ExportButton } from "./components/ExportButton";
+import { ShapeColorSheet } from "./components/ShapeColorSheet";
 import { useSignatures } from "./hooks/useSignatures";
 import { useSavedSignatures } from "./hooks/useSavedSignatures";
 
@@ -41,6 +42,7 @@ export default function App() {
   const [emptyHighlight, setEmptyHighlight] = useState(null);
   const [configOpen, setConfigOpen] = useState(false);
   const [pdfReady, setPdfReady] = useState(false);
+  const [shapeMenuOpen, setShapeMenuOpen] = useState(false);
   const mainRef = useRef(null);
 
   const {
@@ -86,6 +88,19 @@ export default function App() {
         type: "draw",
       });
     }
+  }
+
+  function handleAddText() {
+    if (!pdfReady) return;
+    setEmptyHighlight(null);
+    addSignature(activePage, "text");
+  }
+
+  function handleAddShape(shape) {
+    if (!pdfReady) return;
+    setEmptyHighlight(null);
+    addSignature(activePage, "shape", { shape, widthPct: 0.15, heightPct: 0.1 });
+    setShapeMenuOpen(false);
   }
 
   function handleSaveSignature(sigId, dataUrl) {
@@ -188,6 +203,72 @@ export default function App() {
             <span className="hidden sm:inline">Add Signature</span>
           </button>
           <button
+            onClick={handleAddText}
+            disabled={!pdfReady}
+            className="flex items-center gap-2 px-3 py-2 rounded text-sm font-medium border transition-colors disabled:opacity-40"
+            style={{
+              borderColor: "var(--color-border)",
+              color: "var(--color-text-primary)",
+              background: "var(--color-surface)",
+            }}
+            title={
+              pdfReady ? undefined : "Waiting for PDF to finish loading..."
+            }
+          >
+            <Type size={15} />
+            <span className="hidden sm:inline">Add Text</span>
+          </button>
+          <div className="relative">
+            <button
+              onClick={() => setShapeMenuOpen((v) => !v)}
+              disabled={!pdfReady}
+              className="flex items-center gap-2 px-3 py-2 rounded text-sm font-medium border transition-colors disabled:opacity-40"
+              style={{
+                borderColor: "var(--color-border)",
+                color: "var(--color-text-primary)",
+                background: "var(--color-surface)",
+              }}
+              title={
+                pdfReady ? undefined : "Waiting for PDF to finish loading..."
+              }
+            >
+              <Shapes size={15} />
+              <span className="hidden sm:inline">Shape</span>
+            </button>
+            {shapeMenuOpen && (
+              <>
+                <div
+                  className="fixed inset-0 z-40"
+                  onClick={() => setShapeMenuOpen(false)}
+                />
+                <div
+                  className="absolute right-0 mt-1 flex gap-1 p-1 rounded border shadow-lg z-50"
+                  style={{
+                    background: "var(--color-surface)",
+                    borderColor: "var(--color-border)",
+                  }}
+                >
+                  <button
+                    onClick={() => handleAddShape("rect")}
+                    className="p-2 rounded transition-colors hover:bg-black/10"
+                    style={{ color: "var(--color-text-primary)" }}
+                    title="Rectangle"
+                  >
+                    <Square size={18} />
+                  </button>
+                  <button
+                    onClick={() => handleAddShape("circle")}
+                    className="p-2 rounded transition-colors hover:bg-black/10"
+                    style={{ color: "var(--color-text-primary)" }}
+                    title="Circle"
+                  >
+                    <Circle size={18} />
+                  </button>
+                </div>
+              </>
+            )}
+          </div>
+          <button
             onClick={() => setConfigOpen(true)}
             className="lg:hidden p-2 rounded border transition-colors"
             style={{
@@ -288,6 +369,8 @@ export default function App() {
           savedSignatures={savedSignatures}
         />
       )}
+
+      <ShapeColorSheet signatures={signatures} onUpdate={updateSignature} />
     </div>
   );
 }

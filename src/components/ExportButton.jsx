@@ -8,7 +8,7 @@ export function ExportButton({ pdfBytes, signatures, onHighlightEmpty, fileName 
   const [processing, setProcessing] = useState(false)
 
   function handleClick() {
-    const empty = signatures.filter(s => !s.content)
+    const empty = signatures.filter(s => s.type !== 'shape' && !s.content)
     if (empty.length > 0) {
       onHighlightEmpty(empty.map(s => s.id))
       return
