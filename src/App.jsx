@@ -1,6 +1,7 @@
 import { useState, useRef } from "react";
-import { Sun, Moon, PenLine, FilePlus2, Signature, Type, Shapes, Square, Circle } from "lucide-react";
+import { Sun, Moon, PenLine, FilePlus2, Signature, Type, Shapes, Square, Circle, Download } from "lucide-react";
 import { PdfUploader } from "./components/PdfUploader";
+import { ImageToPdfUploader } from "./components/ImageToPdfUploader";
 import { PdfViewer } from "./components/PdfViewer";
 import { PageSidebar } from "./components/PageSidebar";
 import { SignatureConfigPanel } from "./components/SignatureConfigPanel";
@@ -36,6 +37,7 @@ function ThemeToggle() {
 export default function App() {
   const [pdfBytes, setPdfBytes] = useState(null);
   const [fileName, setFileName] = useState("");
+  const [mode, setMode] = useState("sign");
   const [totalPages, setTotalPages] = useState(0);
   const [activePage, setActivePage] = useState(1);
   const [panelSigId, setPanelSigId] = useState(null);
@@ -54,9 +56,10 @@ export default function App() {
   } = useSignatures();
   const savedSignatures = useSavedSignatures();
 
-  function handleUpload(arrayBuffer, name) {
+  function handleUpload(arrayBuffer, name, uploadMode = "sign") {
     setPdfBytes(arrayBuffer);
     setFileName(name);
+    setMode(uploadMode);
     setActivePage(1);
     setTotalPages(0);
     setPdfReady(false);
@@ -66,9 +69,14 @@ export default function App() {
     clearSignatures();
   }
 
+  function handleConverted(arrayBuffer, name) {
+    handleUpload(arrayBuffer, name, "convert");
+  }
+
   function handleCloseFile() {
     setPdfBytes(null);
     setFileName("");
+    setMode("sign");
     setActivePage(1);
     setTotalPages(0);
     setPdfReady(false);
@@ -76,6 +84,16 @@ export default function App() {
     setEmptyHighlight(null);
     setConfigOpen(false);
     clearSignatures();
+  }
+
+  function handleDownloadConverted() {
+    const blob = new Blob([pdfBytes], { type: "application/pdf" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = fileName || "converted.pdf";
+    a.click();
+    URL.revokeObjectURL(url);
   }
 
   function handleAddSignature() {
@@ -147,7 +165,18 @@ export default function App() {
           </span>
           <ThemeToggle />
         </header>
-        <PdfUploader onUpload={handleUpload} />
+        <div className="flex flex-col md:flex-row flex-1">
+          <PdfUploader onUpload={handleUpload} />
+          <div
+            className="w-px hidden md:block"
+            style={{ background: "var(--color-border)" }}
+          />
+          <div
+            className="h-px md:hidden"
+            style={{ background: "var(--color-border)" }}
+          />
+          <ImageToPdfUploader onConverted={handleConverted} />
+        </div>
       </div>
     );
   }
@@ -186,109 +215,124 @@ export default function App() {
           >
             {activePage} / {totalPages}
           </span>
-          <button
-            onClick={handleAddSignature}
-            disabled={!pdfReady}
-            className="flex items-center gap-2 px-3 py-2 rounded text-sm font-medium border transition-colors disabled:opacity-40"
-            style={{
-              borderColor: "var(--color-border)",
-              color: "var(--color-text-primary)",
-              background: "var(--color-surface)",
-            }}
-            title={
-              pdfReady ? undefined : "Waiting for PDF to finish loading..."
-            }
-          >
-            <PenLine size={15} />
-            <span className="hidden sm:inline">Add Signature</span>
-          </button>
-          <button
-            onClick={handleAddText}
-            disabled={!pdfReady}
-            className="flex items-center gap-2 px-3 py-2 rounded text-sm font-medium border transition-colors disabled:opacity-40"
-            style={{
-              borderColor: "var(--color-border)",
-              color: "var(--color-text-primary)",
-              background: "var(--color-surface)",
-            }}
-            title={
-              pdfReady ? undefined : "Waiting for PDF to finish loading..."
-            }
-          >
-            <Type size={15} />
-            <span className="hidden sm:inline">Add Text</span>
-          </button>
-          <div className="relative">
-            <button
-              onClick={() => setShapeMenuOpen((v) => !v)}
-              disabled={!pdfReady}
-              className="flex items-center gap-2 px-3 py-2 rounded text-sm font-medium border transition-colors disabled:opacity-40"
-              style={{
-                borderColor: "var(--color-border)",
-                color: "var(--color-text-primary)",
-                background: "var(--color-surface)",
-              }}
-              title={
-                pdfReady ? undefined : "Waiting for PDF to finish loading..."
-              }
-            >
-              <Shapes size={15} />
-              <span className="hidden sm:inline">Shape</span>
-            </button>
-            {shapeMenuOpen && (
-              <>
-                <div
-                  className="fixed inset-0 z-40"
-                  onClick={() => setShapeMenuOpen(false)}
-                />
-                <div
-                  className="absolute right-0 mt-1 flex gap-1 p-1 rounded border shadow-lg z-50"
+          {mode === "sign" && (
+            <>
+              <button
+                onClick={handleAddSignature}
+                disabled={!pdfReady}
+                className="flex items-center gap-2 px-3 py-2 rounded text-sm font-medium border transition-colors disabled:opacity-40"
+                style={{
+                  borderColor: "var(--color-border)",
+                  color: "var(--color-text-primary)",
+                  background: "var(--color-surface)",
+                }}
+                title={
+                  pdfReady ? undefined : "Waiting for PDF to finish loading..."
+                }
+              >
+                <PenLine size={15} />
+                <span className="hidden sm:inline">Add Signature</span>
+              </button>
+              <button
+                onClick={handleAddText}
+                disabled={!pdfReady}
+                className="flex items-center gap-2 px-3 py-2 rounded text-sm font-medium border transition-colors disabled:opacity-40"
+                style={{
+                  borderColor: "var(--color-border)",
+                  color: "var(--color-text-primary)",
+                  background: "var(--color-surface)",
+                }}
+                title={
+                  pdfReady ? undefined : "Waiting for PDF to finish loading..."
+                }
+              >
+                <Type size={15} />
+                <span className="hidden sm:inline">Add Text</span>
+              </button>
+              <div className="relative">
+                <button
+                  onClick={() => setShapeMenuOpen((v) => !v)}
+                  disabled={!pdfReady}
+                  className="flex items-center gap-2 px-3 py-2 rounded text-sm font-medium border transition-colors disabled:opacity-40"
                   style={{
-                    background: "var(--color-surface)",
                     borderColor: "var(--color-border)",
+                    color: "var(--color-text-primary)",
+                    background: "var(--color-surface)",
                   }}
+                  title={
+                    pdfReady ? undefined : "Waiting for PDF to finish loading..."
+                  }
                 >
-                  <button
-                    onClick={() => handleAddShape("rect")}
-                    className="p-2 rounded transition-colors hover:bg-black/10"
-                    style={{ color: "var(--color-text-primary)" }}
-                    title="Rectangle"
-                  >
-                    <Square size={18} />
-                  </button>
-                  <button
-                    onClick={() => handleAddShape("circle")}
-                    className="p-2 rounded transition-colors hover:bg-black/10"
-                    style={{ color: "var(--color-text-primary)" }}
-                    title="Circle"
-                  >
-                    <Circle size={18} />
-                  </button>
-                </div>
-              </>
-            )}
-          </div>
-          <button
-            onClick={() => setConfigOpen(true)}
-            className="lg:hidden p-2 rounded border transition-colors"
-            style={{
-              borderColor: "var(--color-border)",
-              color: "var(--color-text-primary)",
-              background: "var(--color-surface)",
-            }}
-            title="Manage signatures"
-          >
-            <Signature size={16} />
-          </button>
-          <ExportButton
-            pdfBytes={pdfBytes}
-            signatures={signatures}
-            onHighlightEmpty={handleHighlightEmpty}
-            fileName={fileName}
-          />
+                  <Shapes size={15} />
+                  <span className="hidden sm:inline">Shape</span>
+                </button>
+                {shapeMenuOpen && (
+                  <>
+                    <div
+                      className="fixed inset-0 z-40"
+                      onClick={() => setShapeMenuOpen(false)}
+                    />
+                    <div
+                      className="absolute right-0 mt-1 flex gap-1 p-1 rounded border shadow-lg z-50"
+                      style={{
+                        background: "var(--color-surface)",
+                        borderColor: "var(--color-border)",
+                      }}
+                    >
+                      <button
+                        onClick={() => handleAddShape("rect")}
+                        className="p-2 rounded transition-colors hover:bg-black/10"
+                        style={{ color: "var(--color-text-primary)" }}
+                        title="Rectangle"
+                      >
+                        <Square size={18} />
+                      </button>
+                      <button
+                        onClick={() => handleAddShape("circle")}
+                        className="p-2 rounded transition-colors hover:bg-black/10"
+                        style={{ color: "var(--color-text-primary)" }}
+                        title="Circle"
+                      >
+                        <Circle size={18} />
+                      </button>
+                    </div>
+                  </>
+                )}
+              </div>
+              <button
+                onClick={() => setConfigOpen(true)}
+                className="lg:hidden p-2 rounded border transition-colors"
+                style={{
+                  borderColor: "var(--color-border)",
+                  color: "var(--color-text-primary)",
+                  background: "var(--color-surface)",
+                }}
+                title="Manage signatures"
+              >
+                <Signature size={16} />
+              </button>
+            </>
+          )}
+          {mode === "sign" ? (
+            <ExportButton
+              pdfBytes={pdfBytes}
+              signatures={signatures}
+              onHighlightEmpty={handleHighlightEmpty}
+              fileName={fileName}
+            />
+          ) : (
+            <button
+              onClick={handleDownloadConverted}
+              className="flex items-center gap-2 px-5 py-2 rounded font-medium text-sm transition-opacity"
+              style={{ background: "var(--color-accent)", color: "#fff" }}
+            >
+              <Download size={16} />
+              Download PDF
+            </button>
+          )}
           <button
             onClick={handleCloseFile}
-            className="p-2 rounded border transition-colors"
+            className="flex items-center gap-2 px-3 py-2 rounded border text-sm font-medium transition-colors"
             style={{
               borderColor: "var(--color-border)",
               color: "var(--color-text-secondary)",
@@ -297,12 +341,13 @@ export default function App() {
             title="Open different file"
           >
             <FilePlus2 size={16} />
+            <span className="hidden sm:inline">File Baru</span>
           </button>
           <ThemeToggle />
         </div>
       </header>
 
-      {emptyHighlight && (
+      {mode === "sign" && emptyHighlight && (
         <div
           className="text-sm px-4 py-2 text-center"
           style={{ background: "var(--color-warning)", color: "#fff" }}
@@ -349,19 +394,21 @@ export default function App() {
           variant="horizontal"
         />
 
-        <SignatureConfigPanel
-          items={savedSignatures.items}
-          selectedId={savedSignatures.selectedId}
-          onAdd={savedSignatures.addSignature}
-          onReplace={savedSignatures.replaceSignature}
-          onRemove={savedSignatures.removeSignature}
-          onSelect={savedSignatures.selectSignature}
-          open={configOpen}
-          onClose={() => setConfigOpen(false)}
-        />
+        {mode === "sign" && (
+          <SignatureConfigPanel
+            items={savedSignatures.items}
+            selectedId={savedSignatures.selectedId}
+            onAdd={savedSignatures.addSignature}
+            onReplace={savedSignatures.replaceSignature}
+            onRemove={savedSignatures.removeSignature}
+            onSelect={savedSignatures.selectSignature}
+            open={configOpen}
+            onClose={() => setConfigOpen(false)}
+          />
+        )}
       </div>
 
-      {panelSigId && (
+      {mode === "sign" && panelSigId && (
         <SignaturePanel
           sigId={panelSigId}
           onSave={handleSaveSignature}
@@ -370,7 +417,9 @@ export default function App() {
         />
       )}
 
-      <ShapeColorSheet signatures={signatures} onUpdate={updateSignature} />
+      {mode === "sign" && (
+        <ShapeColorSheet signatures={signatures} onUpdate={updateSignature} />
+      )}
     </div>
   );
 }
