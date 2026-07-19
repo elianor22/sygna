@@ -121,7 +121,7 @@ export function PdfViewer({
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          const pageNumber = Number(entry.target.dataset.pageNumber)
+          const pageNumber = Number((entry.target as HTMLElement).dataset.pageNumber)
           ratiosRef.current.set(pageNumber, entry.intersectionRatio)
         })
         let bestPage = null

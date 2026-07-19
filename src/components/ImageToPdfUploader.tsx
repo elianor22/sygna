@@ -7,8 +7,8 @@ export function ImageToPdfUploader({ onConverted }) {
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
 
-  async function handleFiles(fileList) {
-    const files = Array.from(fileList || []);
+  async function handleFiles(fileList: FileList | File[] | null) {
+    const files: File[] = Array.from(fileList || []);
     if (files.length === 0) return;
     const invalid = files.find(
       (f) => !["image/png", "image/jpeg", "image/jpg"].includes(f.type)

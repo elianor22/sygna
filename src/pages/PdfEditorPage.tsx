@@ -1,15 +1,16 @@
 import { useState, useRef } from "react";
-import { Sun, Moon, PenLine, FilePlus2, Signature, Type, Shapes, Square, Circle, Download } from "lucide-react";
-import { PdfUploader } from "./components/PdfUploader";
-import { ImageToPdfUploader } from "./components/ImageToPdfUploader";
-import { PdfViewer } from "./components/PdfViewer";
-import { PageSidebar } from "./components/PageSidebar";
-import { SignatureConfigPanel } from "./components/SignatureConfigPanel";
-import { SignaturePanel } from "./components/SignaturePanel";
-import { ExportButton } from "./components/ExportButton";
-import { ShapeColorSheet } from "./components/ShapeColorSheet";
-import { useSignatures } from "./hooks/useSignatures";
-import { useSavedSignatures } from "./hooks/useSavedSignatures";
+import { Link } from "react-router-dom";
+import { Sun, Moon, PenLine, FilePlus2, Signature, Type, Shapes, Square, Circle, Download, Mail } from "lucide-react";
+import { PdfUploader } from "../components/PdfUploader";
+import { ImageToPdfUploader } from "../components/ImageToPdfUploader";
+import { PdfViewer } from "../components/PdfViewer";
+import { PageSidebar } from "../components/PageSidebar";
+import { SignatureConfigPanel } from "../components/SignatureConfigPanel";
+import { SignaturePanel } from "../components/SignaturePanel";
+import { ExportButton } from "../components/ExportButton";
+import { ShapeColorSheet } from "../components/ShapeColorSheet";
+import { useSignatures } from "../hooks/useSignatures";
+import { useSavedSignatures } from "../hooks/useSavedSignatures";
 
 function ThemeToggle() {
   const isDark = document.documentElement.getAttribute("data-theme") === "dark";
@@ -34,7 +35,79 @@ function ThemeToggle() {
   );
 }
 
-export default function App() {
+function EmailGeneratorLink() {
+  return (
+    <Link
+      to="/email-generator"
+      className="flex items-center gap-2 px-3 py-2 rounded border text-sm font-medium transition-colors"
+      style={{
+        borderColor: "var(--color-border)",
+        color: "var(--color-text-secondary)",
+        background: "transparent",
+      }}
+      title="Email Generator"
+    >
+      <Mail size={16} />
+      <span className="hidden sm:inline">Email Generator</span>
+    </Link>
+  );
+}
+
+function EmailGeneratorMenu() {
+  return (
+    <div
+      className="flex flex-col items-center justify-center flex-1 px-6"
+      style={{ background: "var(--color-bg)" }}
+    >
+      <div className="text-center mb-10">
+        <h1
+          className="text-3xl sm:text-4xl font-semibold"
+          style={{ color: "var(--color-text-primary)" }}
+        >
+          Generate an Email
+        </h1>
+        <p
+          className="mt-2 text-sm sm:text-base"
+          style={{ color: "var(--color-text-secondary)" }}
+        >
+          Pick a tone, add your points, get a ready-to-send email.
+        </p>
+      </div>
+      <Link
+        to="/email-generator"
+        className="cursor-pointer border-2 border-dashed rounded-md p-16 flex flex-col items-center gap-4 transition-colors hover:border-accent"
+        style={{
+          borderColor: "var(--color-border)",
+          background: "var(--color-surface)",
+        }}
+      >
+        <Mail size={40} style={{ color: "var(--color-text-secondary)" }} />
+        <div className="text-center">
+          <p
+            className="text-lg font-medium"
+            style={{ color: "var(--color-text-primary)" }}
+          >
+            Open Email Generator
+          </p>
+          <p
+            className="text-sm mt-1"
+            style={{ color: "var(--color-text-secondary)" }}
+          >
+            Formal, friendly, direct or apologetic tone
+          </p>
+        </div>
+        <div
+          className="mt-2 px-6 py-2 rounded text-sm font-medium"
+          style={{ background: "var(--color-accent)", color: "#fff" }}
+        >
+          Get Started
+        </div>
+      </Link>
+    </div>
+  );
+}
+
+export default function PdfEditorPage() {
   const [pdfBytes, setPdfBytes] = useState(null);
   const [fileName, setFileName] = useState("");
   const [mode, setMode] = useState("sign");
@@ -163,7 +236,9 @@ export default function App() {
           >
             Sygna
           </span>
-          <ThemeToggle />
+          <div className="flex items-center gap-2">
+            <ThemeToggle />
+          </div>
         </header>
         <div className="flex flex-col md:flex-row flex-1">
           <PdfUploader onUpload={handleUpload} />
@@ -176,6 +251,15 @@ export default function App() {
             style={{ background: "var(--color-border)" }}
           />
           <ImageToPdfUploader onConverted={handleConverted} />
+          <div
+            className="w-px hidden md:block"
+            style={{ background: "var(--color-border)" }}
+          />
+          <div
+            className="h-px md:hidden"
+            style={{ background: "var(--color-border)" }}
+          />
+          <EmailGeneratorMenu />
         </div>
       </div>
     );
@@ -343,6 +427,7 @@ export default function App() {
             <FilePlus2 size={16} />
             <span className="hidden sm:inline">File Baru</span>
           </button>
+          <EmailGeneratorLink />
           <ThemeToggle />
         </div>
       </header>

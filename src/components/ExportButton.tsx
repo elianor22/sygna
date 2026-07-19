@@ -3,7 +3,14 @@ import { Download } from 'lucide-react'
 import { exportSignedPdf } from '../utils/pdfExport'
 import { PaymentModal } from './PaymentModal'
 
-export function ExportButton({ pdfBytes, signatures, onHighlightEmpty, fileName }) {
+interface ExportButtonProps {
+  pdfBytes: ArrayBuffer
+  signatures: any[]
+  onHighlightEmpty: (ids: string[]) => void
+  fileName: string
+}
+
+export function ExportButton({ pdfBytes, signatures, onHighlightEmpty, fileName }: ExportButtonProps) {
   const [showPayment, setShowPayment] = useState(false)
   const [processing, setProcessing] = useState(false)
 
@@ -20,7 +27,7 @@ export function ExportButton({ pdfBytes, signatures, onHighlightEmpty, fileName 
     setProcessing(true)
     try {
       const bytes = await exportSignedPdf(pdfBytes, signatures)
-      const blob = new Blob([bytes], { type: 'application/pdf' })
+      const blob = new Blob([bytes as BlobPart], { type: 'application/pdf' })
       const url = URL.createObjectURL(blob)
       const a = document.createElement('a')
       a.href = url
