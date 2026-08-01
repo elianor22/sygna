@@ -1,0 +1,26 @@
+.prose pre .hljs {
+  background: transparent;
+}
+
+.prose input[type="checkbox"] {
+  margin-right: 6px;
+}
+
+[data-theme='dark'] .md-prose {
+  --tw-prose-body: #d1d5db;
+  --tw-prose-headings: #f9fafb;
+  --tw-prose-lead: #9ca3af;
+  --tw-prose-links: #f9fafb;
+  --tw-prose-bold: #f9fafb;
+  --tw-prose-counters: #9ca3af;
+  --tw-prose-bullets: #6b7280;
+  --tw-prose-hr: #374151;
+  --tw-prose-quotes: #f9fafb;
+  --tw-prose-quote-borders: #374151;
+  --tw-prose-captions: #9ca3af;
+  --tw-prose-code: #f9fafb;
+  --tw-prose-pre-code: #d1d5db;
+  --tw-prose-pre-bg: #111827;
+  --tw-prose-th-borders: #4b5563;
+  --tw-prose-td-borders: #374151;
+}
