@@ -1,7 +1,7 @@
 import React, { useState, useRef, useCallback, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Sun, Moon, Download, Trash2, ZoomIn, ZoomOut, RotateCcw, ChevronLeft, Minus, Plus, Sparkles, Save, FolderOpen, Magnet } from "lucide-react";
-import { AiFlowchartPanel } from "../components/flowchart/AiFlowchartPanel";
+import { AiFlowchartPanel } from "../components/AiFlowchartPanel";
 import type { AiFlowchartResult } from "../utils/flowchartAI";
 
 // ── Types ──────────────────────────────────────────────────────────────────

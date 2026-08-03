@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Download } from 'lucide-react'
 import { exportSignedPdf } from '../utils/pdfExport'
-import { PaymentModal } from './PaymentModal'
+import { PaymentModal } from '@/components/PaymentModal'
 
 interface ExportButtonProps {
   pdfBytes: ArrayBuffer

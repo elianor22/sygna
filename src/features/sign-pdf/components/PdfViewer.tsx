@@ -2,7 +2,7 @@ import { useState, useCallback, useRef, useEffect, useMemo } from 'react'
 import { Document, Page, pdfjs } from 'react-pdf'
 import 'react-pdf/dist/Page/AnnotationLayer.css'
 import 'react-pdf/dist/Page/TextLayer.css'
-import { useResizeObserver } from '../hooks/useResizeObserver'
+import { useResizeObserver } from '@/hooks/useResizeObserver'
 import { SignatureOverlay } from './SignatureOverlay'
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(

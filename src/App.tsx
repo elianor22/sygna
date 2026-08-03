@@ -1,10 +1,10 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import HomePage from "./pages/HomePage";
-import SignPdfPage from "./pages/SignPdfPage";
-import ImageToPdfPage from "./pages/ImageToPdfPage";
-import EmailGeneratorPage from "./pages/EmailGeneratorPage";
-import MdViewerPage from "./pages/MdViewerPage";
-import FlowchartPage from "./pages/FlowchartPage";
+import { SignPdfPage } from "@/features/sign-pdf";
+import { ImageToPdfPage } from "@/features/image-to-pdf";
+import { EmailGeneratorPage } from "@/features/email-builder";
+import { MdViewerPage } from "@/features/md-viewer";
+import { FlowchartPage } from "@/features/flowchart";
 
 export default function App() {
   return (

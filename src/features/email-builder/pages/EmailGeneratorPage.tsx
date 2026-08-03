@@ -1,6 +1,6 @@
-import { BuilderTopBar } from "@/components/email-builder/BuilderTopBar";
-import { PreviewCanvas } from "@/components/email-builder/PreviewCanvas";
-import { ComponentPalette } from "@/components/email-builder/ComponentPalette";
+import { BuilderTopBar } from "../components/BuilderTopBar";
+import { PreviewCanvas } from "../components/PreviewCanvas";
+import { ComponentPalette } from "../components/ComponentPalette";
 
 export default function EmailGeneratorPage() {
   return (

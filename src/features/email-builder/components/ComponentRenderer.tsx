@@ -1,7 +1,7 @@
 import { type MouseEvent } from "react";
 import { clsx } from "clsx";
 import { ImageIcon, Share2, Trash2 } from "lucide-react";
-import { useEmailStore, type EmailComponent } from "@/store/useEmailStore";
+import { useEmailStore, type EmailComponent } from "../store/useEmailStore";
 
 const TYPE_LABEL: Record<EmailComponent["type"], string> = {
   section: "Section",

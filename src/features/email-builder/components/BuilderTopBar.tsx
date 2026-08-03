@@ -12,8 +12,8 @@ import {
   FileCode,
   X,
 } from "lucide-react";
-import { useEmailStore } from "@/store/useEmailStore";
-import { renderEmailStructureToHtml } from "@/utils/renderEmailDocument";
+import { useEmailStore } from "../store/useEmailStore";
+import { renderEmailStructureToHtml } from "../utils/renderEmailDocument";
 import { downloadFile } from "@/utils/downloadFile";
 
 const STORAGE_KEY = "sygna-email-builder-project";

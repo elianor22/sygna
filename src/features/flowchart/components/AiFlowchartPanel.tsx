@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Sparkles, X, Loader2, KeyRound } from "lucide-react";
-import { generateFlowchartFromPrompt, toFlowchartToon, type AiFlowchartResult } from "../../utils/flowchartAI";
+import { generateFlowchartFromPrompt, toFlowchartToon, type AiFlowchartResult } from "../utils/flowchartAI";
 
 interface AiFlowchartPanelProps {
   open: boolean;

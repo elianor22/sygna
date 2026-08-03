@@ -12,7 +12,7 @@ import {
   PanelBottom,
   type LucideIcon,
 } from "lucide-react";
-import { useEmailStore, type ComponentType, type EmailComponent } from "@/store/useEmailStore";
+import { useEmailStore, type ComponentType, type EmailComponent } from "../store/useEmailStore";
 
 const TYPE_LABEL: Record<ComponentType, string> = {
   section: "Section",

@@ -1,5 +1,5 @@
 import { ArrowLeft, ArrowRight, RefreshCw, MoreVertical, X, Plus } from "lucide-react";
-import { useEmailStore } from "@/store/useEmailStore";
+import { useEmailStore } from "../store/useEmailStore";
 import { ComponentRenderer } from "./ComponentRenderer";
 
 export function PreviewCanvas() {

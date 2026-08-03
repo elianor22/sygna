@@ -1,7 +1,7 @@
 import { useState, useCallback, useRef, useEffect } from 'react'
 import { LayoutPanelLeft, Columns2, ArrowLeft } from 'lucide-react'
 import { Link } from 'react-router-dom'
-import ViewerPane, { type PanelData } from '../components/markdown/ViewerPane'
+import ViewerPane, { type PanelData } from '../components/ViewerPane'
 
 export default function MdViewerPage() {
   const [left, setLeft] = useState<PanelData | null>(null)

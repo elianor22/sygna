@@ -2,7 +2,7 @@ import { useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import { Sun, Moon, FilePlus2, Download, ChevronLeft } from "lucide-react";
 import { ImageToPdfUploader } from "../components/ImageToPdfUploader";
-import { PdfViewer } from "../components/PdfViewer";
+import { PdfViewer } from "@/features/sign-pdf";
 
 function ThemeToggle() {
   const isDark = document.documentElement.getAttribute("data-theme") === "dark";

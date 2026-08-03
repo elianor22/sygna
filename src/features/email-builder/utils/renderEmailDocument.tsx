@@ -1,7 +1,7 @@
 import { Fragment, type ReactNode } from "react";
 import { render } from "@react-email/render";
 import { Html, Head, Body, Container, Section, Row, Column, Img, Text, Hr, Button } from "@react-email/components";
-import type { EmailComponent } from "@/store/useEmailStore";
+import type { EmailComponent } from "../store/useEmailStore";
 
 const TEXT_PRIMARY = "#1B2A4A";
 const BORDER = "#DDE1E6";
